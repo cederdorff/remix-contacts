@@ -14,17 +14,6 @@ export async function loader({ params }) {
     return json({ contact });
 }
 
-// Actions only run on the server and handle POST
-// PUT, PATCH, and DELETE. They can also provide data
-// to the component
-export async function action({ request, params }) {
-    // invariant(params.contactId, "Missing contactId param");
-    // const formData = await request.formData();
-    // return updateContact(params.contactId, {
-    //     favorite: formData.get("favorite") === "true"
-    // });
-}
-
 export default function Contact() {
     const { contact } = useLoaderData();
 
@@ -89,4 +78,19 @@ function Favorite({ contact }) {
             </button>
         </fetcher.Form>
     );
+}
+
+// Actions only run on the server and handle POST
+// PUT, PATCH, and DELETE. They can also provide data
+// to the component
+export async function action({ request, params }) {
+    invariant(params.contactId, "Missing contactId param");
+    const formData = await request.formData();
+
+    console.log(request);
+    console.log(params);
+
+    // return updateContact(params.contactId, {
+    //     favorite: formData.get("favorite") === "true"
+    // });
 }
