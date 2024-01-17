@@ -17,18 +17,31 @@ import appStylesHref from "./app.css";
 
 export const links = () => [{ rel: "stylesheet", href: appStylesHref }];
 
-import { createEmptyContact, getContacts } from "./data";
 import { useEffect } from "react";
 
 export async function loader({ request }) {
     const url = new URL(request.url);
     const q = url.searchParams.get("q");
-    const contacts = await getContacts(q);
+    const response = await fetch(`http://localhost:3000/contacts/search?q=${q || ""}`);
+    const contacts = await response.json();
     return json({ contacts });
 }
 
 export async function action() {
-    const contact = await createEmptyContact();
+    const response = await fetch("http://localhost:3000/contacts", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            first: "",
+            last: "",
+            twitter: "",
+            avatar: "",
+            favorite: false
+        })
+    });
+    const contact = await response.json();
     return redirect(`/contacts/${contact.id}/edit`);
 }
 

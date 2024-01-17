@@ -1,13 +1,13 @@
 import { Form, useLoaderData, useFetcher } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import { getContact, updateContact } from "../data";
 import invariant from "tiny-invariant";
 
 // Loaders only run on the server and provide data
 // to the component on GET requests
 export async function loader({ params }) {
     invariant(params.contactId, "Missing contactId param");
-    const contact = await getContact(params.contactId);
+    const response = await fetch(`http://localhost:3000/contacts/${params.contactId}`);
+    const contact = await response.json();
     if (!contact) {
         throw new Response("Contact not found", { status: 404 });
     }
@@ -18,11 +18,11 @@ export async function loader({ params }) {
 // PUT, PATCH, and DELETE. They can also provide data
 // to the component
 export async function action({ request, params }) {
-    invariant(params.contactId, "Missing contactId param");
-    const formData = await request.formData();
-    return updateContact(params.contactId, {
-        favorite: formData.get("favorite") === "true"
-    });
+    // invariant(params.contactId, "Missing contactId param");
+    // const formData = await request.formData();
+    // return updateContact(params.contactId, {
+    //     favorite: formData.get("favorite") === "true"
+    // });
 }
 
 export default function Contact() {

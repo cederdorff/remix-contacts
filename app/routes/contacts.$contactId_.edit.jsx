@@ -2,11 +2,10 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import { getContact, updateContact } from "../data";
-
 export async function loader({ params }) {
     invariant(params.contactId, "Missing contactId param");
-    const contact = await getContact(params.contactId);
+    const response = await fetch(`http://localhost:3000/contacts/${params.contactId}`);
+    const contact = await response.json();
     if (!contact) {
         throw new Response("Not Found", { status: 404 });
     }
@@ -19,7 +18,15 @@ export async function action({ request, params }) {
     const formData = await request.formData();
     const updates = Object.fromEntries(formData);
     console.log(updates);
-    await updateContact(params.contactId, updates);
+
+    await fetch(`http://localhost:3000/contacts/${params.contactId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updates)
+    });
+
     return redirect(`/contacts/${params.contactId}`);
 }
 

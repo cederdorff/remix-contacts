@@ -1,10 +1,10 @@
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
-import { deleteContact } from "../data";
-
 export async function action({ params }) {
     invariant(params.contactId, "Missing contactId param");
-    await deleteContact(params.contactId);
+    await fetch(`http://localhost:3000/contacts/${params.contactId}`, {
+        method: "DELETE"
+    });
     return redirect("/");
 }
