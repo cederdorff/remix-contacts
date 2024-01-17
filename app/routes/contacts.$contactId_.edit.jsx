@@ -12,24 +12,6 @@ export async function loader({ params }) {
     return json({ contact });
 }
 
-export async function action({ request, params }) {
-    invariant(params.contactId, "Missing contactId param");
-
-    const formData = await request.formData();
-    const updates = Object.fromEntries(formData);
-    console.log(updates);
-
-    await fetch(`http://localhost:3000/contacts/${params.contactId}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(updates)
-    });
-
-    return redirect(`/contacts/${params.contactId}`);
-}
-
 export default function EditContact() {
     const { contact } = useLoaderData();
     const navigate = useNavigate();
@@ -77,4 +59,21 @@ export default function EditContact() {
             </p>
         </Form>
     );
+}
+
+export async function action({ request, params }) {
+    invariant(params.contactId, "Missing contactId param");
+
+    const formData = await request.formData();
+    const updates = Object.fromEntries(formData);
+
+    await fetch(`http://localhost:3000/contacts/${params.contactId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updates)
+    });
+
+    return redirect(`/contacts/${params.contactId}`);
 }
