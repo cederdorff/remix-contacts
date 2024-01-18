@@ -109,7 +109,7 @@ export default function App() {
                                                 </>
                                             ) : (
                                                 <i>No Name</i>
-                                            )}{" "}
+                                            )}
                                             {contact.favorite ? <span>★</span> : null}
                                         </NavLink>
                                     </li>
