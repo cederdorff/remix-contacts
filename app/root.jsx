@@ -22,13 +22,13 @@ import { useEffect } from "react";
 export async function loader({ request }) {
     const url = new URL(request.url);
     const q = url.searchParams.get("q");
-    const response = await fetch(`http://localhost:3000/contacts/search?q=${q || ""}`);
+    const response = await fetch(`http://localhost:3000/api/contacts/search?q=${q || ""}`);
     const contacts = await response.json();
     return json({ contacts });
 }
 
 export async function action() {
-    const response = await fetch("http://localhost:3000/contacts", {
+    const response = await fetch("http://localhost:3000/api/contacts", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

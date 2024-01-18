@@ -4,7 +4,7 @@ import invariant from "tiny-invariant";
 
 export async function loader({ params }) {
     invariant(params.contactId, "Missing contactId param");
-    const response = await fetch(`http://localhost:3000/contacts/${params.contactId}`);
+    const response = await fetch(`http://localhost:3000/api/contacts/${params.contactId}`);
     const contact = await response.json();
     if (!contact) {
         throw new Response("Not Found", { status: 404 });
@@ -67,7 +67,7 @@ export async function action({ request, params }) {
     const formData = await request.formData();
     const updates = Object.fromEntries(formData);
 
-    await fetch(`http://localhost:3000/contacts/${params.contactId}`, {
+    await fetch(`http://localhost:3000/api/contacts/${params.contactId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
