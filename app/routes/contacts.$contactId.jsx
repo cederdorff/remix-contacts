@@ -85,12 +85,9 @@ function Favorite({ contact }) {
 // to the component
 export async function action({ request, params }) {
     invariant(params.contactId, "Missing contactId param");
-    const formData = await request.formData();
-    const updates = Object.fromEntries(formData);
 
     const response = await fetch(`http://localhost:3000/contacts/${params.contactId}/favorite`, {
-        method: "PUT",
-        body: JSON.stringify(updates)
+        method: "PUT"
     });
     const contact = await response.json();
     return json({ contact });
