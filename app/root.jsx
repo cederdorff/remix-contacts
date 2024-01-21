@@ -42,14 +42,15 @@ export async function action() {
         })
     });
     const contact = await response.json();
-    return redirect(`/contacts/${contact.id}/edit`);
+    return redirect(`/contacts/${contact._id}/edit`);
 }
 
 export default function App() {
     const { contacts, q } = useLoaderData();
     const navigation = useNavigation();
     const submit = useSubmit();
-    const searching = navigation.location && new URLSearchParams(navigation.location.search).has("q");
+    const searching =
+        navigation.location && new URLSearchParams(navigation.location.search).has("q");
 
     useEffect(() => {
         const searchField = document.getElementById("q");
@@ -77,7 +78,10 @@ export default function App() {
                 <div id="sidebar">
                     <h1>Remix Contacts</h1>
                     <div>
-                        <Form id="search-form" role="search" onChange={handleSearchOnChange}>
+                        <Form
+                            id="search-form"
+                            role="search"
+                            onChange={handleSearchOnChange}>
                             <input
                                 id="q"
                                 aria-label="Search contacts"
@@ -97,12 +101,16 @@ export default function App() {
                         {contacts.length ? (
                             <ul>
                                 {contacts.map(contact => (
-                                    <li key={contact.id}>
+                                    <li key={contact._id}>
                                         <NavLink
                                             className={({ isActive, isPending }) =>
-                                                isActive ? "active" : isPending ? "pending" : ""
+                                                isActive
+                                                    ? "active"
+                                                    : isPending
+                                                    ? "pending"
+                                                    : ""
                                             }
-                                            to={`contacts/${contact.id}`}>
+                                            to={`contacts/${contact._id}`}>
                                             {contact.first || contact.last ? (
                                                 <>
                                                     {contact.first} {contact.last}
@@ -122,7 +130,11 @@ export default function App() {
                         )}
                     </nav>
                 </div>
-                <div className={navigation.state === "loading" && !searching ? "loading" : ""} id="detail">
+                <div
+                    className={
+                        navigation.state === "loading" && !searching ? "loading" : ""
+                    }
+                    id="detail">
                     <Outlet />
                 </div>
 
