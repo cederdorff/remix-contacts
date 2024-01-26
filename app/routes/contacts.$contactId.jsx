@@ -87,7 +87,7 @@ export async function action({ request, params }) {
     invariant(params.contactId, "Missing contactId param");
 
     const response = await fetch(`http://localhost:3000/contacts/${params.contactId}/favorite`, {
-        method: "PUT"
+        method: "PATCH"
     });
     const contact = await response.json();
     return json({ contact });
