@@ -19,19 +19,3 @@ export default function FavoriteForm({ contact }) {
         </fetcher.Form>
     );
 }
-
-// Actions only run on the server and handle POST
-// PUT, PATCH, and DELETE. They can also provide data
-// to the component
-export async function action({ params }) {
-    invariant(params.contactId, "Missing contactId param");
-
-    const response = await fetch(
-        `${process.env.API}/contacts/${params.contactId}/favorite`,
-        {
-            method: "PATCH"
-        }
-    );
-    const contact = await response.json();
-    return json({ contact });
-}

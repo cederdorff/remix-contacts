@@ -1,5 +1,5 @@
-import { Form, useLoaderData, useFetcher } from "@remix-run/react";
 import { json } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import FavoriteForm from "../components/FavoriteForm";
 
@@ -41,13 +41,7 @@ export default function Contact() {
 
             <div>
                 <h1>
-                    {contact.first || contact.last ? (
-                        <>
-                            {contact.first} {contact.last}
-                        </>
-                    ) : (
-                        <i>No Name</i>
-                    )}
+                    {contact.first} {contact.last}
                     <FavoriteForm contact={contact} />
                 </h1>
 
@@ -76,4 +70,21 @@ export default function Contact() {
             </div>
         </div>
     );
+}
+
+// Actions only run on the server and handle POST
+// PUT, PATCH, and DELETE. They can also provide data
+// to the component
+export async function action({ params }) {
+    console.log("!!!!Yooooo!!!!");
+    invariant(params.contactId, "Missing contactId param");
+
+    const response = await fetch(
+        `${process.env.API}/contacts/${params.contactId}/favorite`,
+        {
+            method: "PATCH"
+        }
+    );
+    const contact = await response.json();
+    return json({ contact });
 }
