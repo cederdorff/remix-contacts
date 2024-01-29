@@ -4,7 +4,9 @@ import invariant from "tiny-invariant";
 
 export async function loader({ params }) {
     invariant(params.contactId, "Missing contactId param");
-    const response = await fetch(`http://localhost:3000/contacts/${params.contactId}`);
+    const response = await fetch(
+        `${process.env.API}/contacts/${params.contactId}`
+    );
     const contact = await response.json();
     if (!contact) {
         throw new Response("Not Found", { status: 404 });
@@ -31,11 +33,22 @@ export default function EditContact() {
                     type="text"
                     placeholder="First"
                 />
-                <input aria-label="Last name" defaultValue={contact.last} name="last" placeholder="Last" type="text" />
+                <input
+                    aria-label="Last name"
+                    defaultValue={contact.last}
+                    name="last"
+                    placeholder="Last"
+                    type="text"
+                />
             </p>
             <label>
                 <span>Twitter</span>
-                <input defaultValue={contact.twitter} name="twitter" placeholder="@jack" type="text" />
+                <input
+                    defaultValue={contact.twitter}
+                    name="twitter"
+                    placeholder="@jack"
+                    type="text"
+                />
             </label>
             <label>
                 <span>Avatar URL</span>

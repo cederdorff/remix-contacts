@@ -22,13 +22,15 @@ import { useEffect } from "react";
 export async function loader({ request }) {
     const url = new URL(request.url);
     const q = url.searchParams.get("q");
-    const response = await fetch(`http://localhost:3000/contacts/search?q=${q || ""}`);
+    const response = await fetch(
+        `${process.env.API}/contacts/search?q=${q || ""}`
+    );
     const contacts = await response.json();
     return json({ contacts });
 }
 
 export async function action() {
-    const response = await fetch("http://localhost:3000/contacts", {
+    const response = await fetch(`${process.env.API}/contacts`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -50,7 +52,8 @@ export default function App() {
     const navigation = useNavigation();
     const submit = useSubmit();
     const searching =
-        navigation.location && new URLSearchParams(navigation.location.search).has("q");
+        navigation.location &&
+        new URLSearchParams(navigation.location.search).has("q");
 
     useEffect(() => {
         const searchField = document.getElementById("q");
@@ -70,7 +73,10 @@ export default function App() {
         <html lang="en">
             <head>
                 <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1"
+                />
                 <Meta />
                 <Links />
             </head>
@@ -91,7 +97,11 @@ export default function App() {
                                 type="search"
                                 name="q"
                             />
-                            <div id="search-spinner" aria-hidden hidden={!searching} />
+                            <div
+                                id="search-spinner"
+                                aria-hidden
+                                hidden={!searching}
+                            />
                         </Form>
                         <Form method="post">
                             <button type="submit">New</button>
@@ -103,7 +113,10 @@ export default function App() {
                                 {contacts.map(contact => (
                                     <li key={contact._id}>
                                         <NavLink
-                                            className={({ isActive, isPending }) =>
+                                            className={({
+                                                isActive,
+                                                isPending
+                                            }) =>
                                                 isActive
                                                     ? "active"
                                                     : isPending
@@ -113,12 +126,15 @@ export default function App() {
                                             to={`contacts/${contact._id}`}>
                                             {contact.first || contact.last ? (
                                                 <>
-                                                    {contact.first} {contact.last}
+                                                    {contact.first}{" "}
+                                                    {contact.last}
                                                 </>
                                             ) : (
                                                 <i>No Name</i>
                                             )}
-                                            {contact.favorite ? <span>★</span> : null}
+                                            {contact.favorite ? (
+                                                <span>★</span>
+                                            ) : null}
                                         </NavLink>
                                     </li>
                                 ))}
@@ -132,7 +148,9 @@ export default function App() {
                 </div>
                 <div
                     className={
-                        navigation.state === "loading" && !searching ? "loading" : ""
+                        navigation.state === "loading" && !searching
+                            ? "loading"
+                            : ""
                     }
                     id="detail">
                     <Outlet />

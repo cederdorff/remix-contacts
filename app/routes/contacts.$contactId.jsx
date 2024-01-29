@@ -6,7 +6,9 @@ import invariant from "tiny-invariant";
 // to the component on GET requests
 export async function loader({ params }) {
     invariant(params.contactId, "Missing contactId param");
-    const response = await fetch(`http://localhost:3000/contacts/${params.contactId}`);
+    const response = await fetch(
+        `http://localhost:3000/contacts/${params.contactId}`
+    );
     const contact = await response.json();
     if (!contact) {
         throw new Response("Contact not found", { status: 404 });
@@ -18,7 +20,9 @@ export default function Contact() {
     const { contact } = useLoaderData();
 
     function confirmDelete(event) {
-        const response = confirm("Please confirm you want to delete this record.");
+        const response = confirm(
+            "Please confirm you want to delete this record."
+        );
         if (!response) {
             event.preventDefault();
         }
@@ -27,7 +31,11 @@ export default function Contact() {
     return (
         <div id="contact">
             <div>
-                <img alt={`${contact.first} ${contact.last} avatar`} key={contact.avatar} src={contact.avatar} />
+                <img
+                    alt={`${contact.first} ${contact.last} avatar`}
+                    key={contact.avatar}
+                    src={contact.avatar}
+                />
             </div>
 
             <div>
@@ -44,7 +52,9 @@ export default function Contact() {
 
                 {contact.twitter ? (
                     <p>
-                        <a href={`https://twitter.com/${contact.twitter}`}>{contact.twitter}</a>
+                        <a href={`https://twitter.com/${contact.twitter}`}>
+                            {contact.twitter}
+                        </a>
                     </p>
                 ) : null}
 
@@ -55,7 +65,10 @@ export default function Contact() {
                         <button type="submit">Edit</button>
                     </Form>
 
-                    <Form action="destroy" method="post" onSubmit={confirmDelete}>
+                    <Form
+                        action="destroy"
+                        method="post"
+                        onSubmit={confirmDelete}>
                         <button type="submit">Delete</button>
                     </Form>
                 </div>
@@ -66,12 +79,16 @@ export default function Contact() {
 
 function Favorite({ contact }) {
     const fetcher = useFetcher();
-    const favorite = fetcher.formData ? fetcher.formData.get("favorite") === "true" : contact.favorite;
+    const favorite = fetcher.formData
+        ? fetcher.formData.get("favorite") === "true"
+        : contact.favorite;
 
     return (
         <fetcher.Form method="post">
             <button
-                aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+                aria-label={
+                    favorite ? "Remove from favorites" : "Add to favorites"
+                }
                 name="favorite"
                 value={favorite ? "false" : "true"}>
                 {favorite ? "★" : "☆"}
@@ -86,9 +103,12 @@ function Favorite({ contact }) {
 export async function action({ request, params }) {
     invariant(params.contactId, "Missing contactId param");
 
-    const response = await fetch(`http://localhost:3000/contacts/${params.contactId}/favorite`, {
-        method: "PATCH"
-    });
+    const response = await fetch(
+        `${process.env.API}/contacts/${params.contactId}/favorite`,
+        {
+            method: "PATCH"
+        }
+    );
     const contact = await response.json();
     return json({ contact });
 }
