@@ -1,6 +1,7 @@
 import { json, redirect } from "@remix-run/node";
-import { Form, useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import ContactForm from "../components/ContactForm";
 
 export async function loader({ params }) {
     invariant(params.contactId, "Missing contactId param");
@@ -16,61 +17,12 @@ export async function loader({ params }) {
 
 export default function EditContact() {
     const { contact } = useLoaderData();
-    const navigate = useNavigate();
-
-    function cancel() {
-        navigate(-1);
-    }
 
     return (
-        <Form id="contact-form" method="post">
-            <p>
-                <span>Name</span>
-                <input
-                    defaultValue={contact.first}
-                    aria-label="First name"
-                    name="first"
-                    type="text"
-                    placeholder="First"
-                />
-                <input
-                    aria-label="Last name"
-                    defaultValue={contact.last}
-                    name="last"
-                    placeholder="Last"
-                    type="text"
-                />
-            </p>
-            <label>
-                <span>Twitter</span>
-                <input
-                    defaultValue={contact.twitter}
-                    name="twitter"
-                    placeholder="@jack"
-                    type="text"
-                />
-            </label>
-            <label>
-                <span>Avatar URL</span>
-                <input
-                    aria-label="Avatar URL"
-                    defaultValue={contact.avatar}
-                    name="avatar"
-                    placeholder="https://example.com/avatar.jpg"
-                    type="text"
-                />
-            </label>
-            <label>
-                <span>Notes</span>
-                <textarea defaultValue={contact.notes} name="notes" rows={6} />
-            </label>
-            <p>
-                <button type="submit">Save</button>
-                <button type="button" onClick={cancel}>
-                    Cancel
-                </button>
-            </p>
-        </Form>
+        <>
+            <h1>Update Contact</h1>
+            <ContactForm method="PUT" contact={contact} />
+        </>
     );
 }
 

@@ -1,6 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import {
     Form,
+    Link,
     Links,
     LiveReload,
     Meta,
@@ -27,24 +28,6 @@ export async function loader({ request }) {
     );
     const contacts = await response.json();
     return json({ contacts });
-}
-
-export async function action() {
-    const response = await fetch(`${process.env.API}/contacts`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            first: "",
-            last: "",
-            twitter: "",
-            avatar: "",
-            favorite: false
-        })
-    });
-    const contact = await response.json();
-    return redirect(`/contacts/${contact._id}/edit`);
 }
 
 export default function App() {
@@ -103,9 +86,9 @@ export default function App() {
                                 hidden={!searching}
                             />
                         </Form>
-                        <Form method="post">
+                        <Link to="contacts/create">
                             <button type="submit">New</button>
-                        </Form>
+                        </Link>
                     </div>
                     <nav>
                         {contacts.length ? (
