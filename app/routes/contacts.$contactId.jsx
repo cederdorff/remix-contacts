@@ -1,6 +1,7 @@
 import { Form, useLoaderData, useFetcher } from "@remix-run/react";
 import { json } from "@remix-run/node";
 import invariant from "tiny-invariant";
+import FavoriteForm from "../components/FavoriteForm";
 
 // Loaders only run on the server and provide data
 // to the component on GET requests
@@ -47,7 +48,7 @@ export default function Contact() {
                     ) : (
                         <i>No Name</i>
                     )}
-                    <Favorite contact={contact} />
+                    <FavoriteForm contact={contact} />
                 </h1>
 
                 {contact.twitter ? (
@@ -75,40 +76,4 @@ export default function Contact() {
             </div>
         </div>
     );
-}
-
-function Favorite({ contact }) {
-    const fetcher = useFetcher();
-    const favorite = fetcher.formData
-        ? fetcher.formData.get("favorite") === "true"
-        : contact.favorite;
-
-    return (
-        <fetcher.Form method="post">
-            <button
-                aria-label={
-                    favorite ? "Remove from favorites" : "Add to favorites"
-                }
-                name="favorite"
-                value={favorite ? "false" : "true"}>
-                {favorite ? "★" : "☆"}
-            </button>
-        </fetcher.Form>
-    );
-}
-
-// Actions only run on the server and handle POST
-// PUT, PATCH, and DELETE. They can also provide data
-// to the component
-export async function action({ request, params }) {
-    invariant(params.contactId, "Missing contactId param");
-
-    const response = await fetch(
-        `${process.env.API}/contacts/${params.contactId}/favorite`,
-        {
-            method: "PATCH"
-        }
-    );
-    const contact = await response.json();
-    return json({ contact });
 }
