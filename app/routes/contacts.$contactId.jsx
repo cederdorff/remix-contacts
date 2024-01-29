@@ -30,7 +30,7 @@ export default function Contact() {
     }
 
     return (
-        <div id="contact">
+        <div id="contact" className="flex">
             <div>
                 <img
                     alt={`${contact.first} ${contact.last} avatar`}
@@ -39,8 +39,8 @@ export default function Contact() {
                 />
             </div>
 
-            <div>
-                <h1>
+            <div className="pl-6">
+                <h1 className="text-2xl flex">
                     {contact.first} {contact.last}
                     <FavoriteForm contact={contact} />
                 </h1>
@@ -55,16 +55,24 @@ export default function Contact() {
 
                 {contact.notes ? <p>{contact.notes}</p> : null}
 
-                <div>
+                <div className="flex space-x-3 mt-3">
                     <Form action="edit">
-                        <button type="submit">Edit</button>
+                        <button
+                            type="submit"
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Edit
+                        </button>
                     </Form>
 
                     <Form
                         action="destroy"
                         method="post"
                         onSubmit={confirmDelete}>
-                        <button type="submit">Delete</button>
+                        <button
+                            type="submit"
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Delete
+                        </button>
                     </Form>
                 </div>
             </div>

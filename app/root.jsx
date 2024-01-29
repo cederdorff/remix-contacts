@@ -1,4 +1,4 @@
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
     Form,
     Link,
@@ -14,9 +14,9 @@ import {
     useSubmit
 } from "@remix-run/react";
 
-import appStylesHref from "./app.css";
+import stylesheet from "./tailwind.css";
 
-export const links = () => [{ rel: "stylesheet", href: appStylesHref }];
+export const links = () => [{ rel: "stylesheet", href: stylesheet }];
 
 import { useEffect } from "react";
 
@@ -64,80 +64,102 @@ export default function App() {
                 <Links />
             </head>
             <body>
-                <div id="sidebar">
-                    <h1>Remix Contacts</h1>
-                    <div>
-                        <Form
-                            id="search-form"
-                            role="search"
-                            onChange={handleSearchOnChange}>
-                            <input
-                                id="q"
-                                aria-label="Search contacts"
-                                className={searching ? "loading" : ""}
-                                defaultValue={q || ""}
-                                placeholder="Search"
-                                type="search"
-                                name="q"
-                            />
-                            <div
-                                id="search-spinner"
-                                aria-hidden
-                                hidden={!searching}
-                            />
-                        </Form>
-                        <Link to="contacts/create">
-                            <button type="submit">New</button>
-                        </Link>
+                <aside className="flex h-screen bg-slate-900 text-slate-50">
+                    {/* Sidebar */}
+                    <div className="w-64  p-4">
+                        <h2 className="text-2xl font-bold mb-4">
+                            Remix Contacts
+                        </h2>
+                        <div>
+                            <Form
+                                id="search-form"
+                                role="search"
+                                onChange={handleSearchOnChange}>
+                                <input
+                                    id="q"
+                                    aria-label="Search contacts"
+                                    className={
+                                        searching
+                                            ? "loading"
+                                            : "" +
+                                              "border border-gray-300 rounded-md p-2"
+                                    }
+                                    defaultValue={q || ""}
+                                    placeholder="Search"
+                                    type="search"
+                                    name="q"
+                                />
+                                <div
+                                    id="search-spinner"
+                                    aria-hidden
+                                    hidden={!searching}
+                                />
+                            </Form>
+                            <Link to="contacts/create">
+                                <button
+                                    type="submit"
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    New
+                                </button>
+                            </Link>
+                        </div>
+                        <nav>
+                            {contacts.length ? (
+                                <ul>
+                                    {contacts.map(contact => (
+                                        <li
+                                            key={contact._id}
+                                            className="tracking-wide leading-7">
+                                            <NavLink
+                                                className={({
+                                                    isActive,
+                                                    isPending
+                                                }) =>
+                                                    isActive
+                                                        ? "active"
+                                                        : isPending
+                                                        ? "pending"
+                                                        : ""
+                                                }
+                                                to={`contacts/${contact._id}`}>
+                                                {contact.first ||
+                                                contact.last ? (
+                                                    <>
+                                                        {contact.first}{" "}
+                                                        {contact.last}
+                                                    </>
+                                                ) : (
+                                                    <i>No Name</i>
+                                                )}
+                                                {contact.favorite ? (
+                                                    <span>★</span>
+                                                ) : null}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>
+                                    <i>No contacts</i>
+                                </p>
+                            )}
+                        </nav>
                     </div>
-                    <nav>
-                        {contacts.length ? (
-                            <ul>
-                                {contacts.map(contact => (
-                                    <li key={contact._id}>
-                                        <NavLink
-                                            className={({
-                                                isActive,
-                                                isPending
-                                            }) =>
-                                                isActive
-                                                    ? "active"
-                                                    : isPending
-                                                    ? "pending"
-                                                    : ""
-                                            }
-                                            to={`contacts/${contact._id}`}>
-                                            {contact.first || contact.last ? (
-                                                <>
-                                                    {contact.first}{" "}
-                                                    {contact.last}
-                                                </>
-                                            ) : (
-                                                <i>No Name</i>
-                                            )}
-                                            {contact.favorite ? (
-                                                <span>★</span>
-                                            ) : null}
-                                        </NavLink>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>
-                                <i>No contacts</i>
-                            </p>
-                        )}
-                    </nav>
-                </div>
-                <div
-                    className={
-                        navigation.state === "loading" && !searching
-                            ? "loading"
-                            : ""
-                    }
-                    id="detail">
-                    <Outlet />
-                </div>
+
+                    {/* Content */}
+                    <div className="flex-1 p-4">
+                        {/* Your content goes here */}
+                        <div
+                            className={
+                                navigation.state === "loading" && !searching
+                                    ? "loading"
+                                    : ""
+                            }
+                            id="detail">
+                            <Outlet />
+                        </div>
+                    </div>
+                </aside>
 
                 <ScrollRestoration />
                 <Scripts />
